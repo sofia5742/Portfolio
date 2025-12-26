@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Sofia Lashchinina | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #111111;
+            --muted: #6c757d;
+            --border: #e9ecef;
+            --accent: #8e7f7d;
+            --font-h: 'Montserrat', sans-serif;
+            --font-b: 'Cormorant Garamond', serif;
+        }
+
+        body.dark-mode {
+            --bg: #121212;
+            --text: #ecf0f1;
+            --muted: #b0b0b0;
+            --border: #2c2c2c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-h);
+            line-height: 1.4;
+            transition: background-color 0.4s ease;
+        }
+
+        /* --- TOP BAR --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            height: 60px;
+            padding: 0 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            z-index: 2000;
+        }
+
+        .nav-left { font-weight: 600; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        
+        .nav-socials { display: flex; gap: 15px; border-right: 1px solid var(--border); padding-right: 20px; }
+        .nav-socials a { color: var(--text); font-size: 1.1rem; transition: 0.3s; }
+        .nav-socials a:hover { color: var(--accent); }
+
+        .nav-controls { display: flex; gap: 15px; }
+        .ctrl-btn {
+            background: none;
+            border: none; color: var(--text);
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; font-family: var(--font-h);
+        }
+
+        /* --- CONTENT --- */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 100px 5% 60px;
+        }
+
+        .intro-header {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+            align-items: start;
+        }
+
+        .about-text {
+            font-family: var(--font-b);
+            font-size: 1.3rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* --- PROJECTS --- */
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+            padding-bottom: 5px;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .project-card { cursor: pointer; }
+        .img-container {
+            aspect-ratio: 16/10;
+            background: var(--border);
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .img-container img {
+            width: 100%;
+            height: 100%; object-fit: cover;
+            filter: grayscale(100%); transition: 0.6s ease;
+        }
+        .project-card:hover img { filter: grayscale(0%); transform: scale(1.03); }
+
+        /* --- CONTACT --- */
+        .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            font-family: var(--font-b);
+            font-size: 1.2rem;
+            outline: none;
+            resize: none;
+        }
+        textarea { grid-column: span 2; }
+        .submit-btn {
+            grid-column: span 2;
+            justify-self: start;
+            background: var(--text);
+            color: var(--bg);
+            padding: 12px 40px;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* --- MODAL --- */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 3000;
+            display: none;
+            padding: 60px 5%;
+            overflow-y: auto;
+        }
+        .modal.active { display: block; }
+        .close-modal { position: fixed; top: 20px; right: 30px; font-size: 2rem; cursor: pointer; }
+
+        @media (max-width: 800px) {
+            .intro-header, .project-grid, .contact-form { grid-template-columns: 1fr; }
+            textarea, .submit-btn { grid-column: span 1; }
+            .nav-socials { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-left">Sofia Lashchinina</div>
+        <div class="nav-right">
+            <div class="nav-socials">
+                <a href="https://linkedin.com/in/sofia" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="mailto:sofia@architektka.cz"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+            <div class="nav-controls">
+                <button class="ctrl-btn" id="lang-btn">EN</button>
+                <button class="ctrl-btn" id="theme-btn"><i class="fa-solid fa-moon"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal" id="p-modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div style="max-width: 900px; margin: 0 auto;">
+            <img src="" id="m-img" style="width: 100%; margin-bottom: 25px;">
+            <h2 id="m-title" style="text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px;"></h2>
+            <p id="m-desc" style="font-family: var(--font-b); font-size: 1.3rem; color: var(--muted); line-height: 1.7;"></p>
+        </div>
+    </div>
+
+    <main class="main-container">
+        <header class="intro-header">
+            <h2 style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;">Portfolio</h2>
+            <div class="about-text" id="about-me">
+                Jsem studentka architektury zaměřená na minimalistické formy a funkční využití prostoru. Ve své tvorbě hledám rovnováhu mezi estetikou a praktičností.
+            </div>
+        </header>
+
+        <section id="work">
+            <div class="section-label" id="lbl-work">Vybrané projekty</div>
+    
+            <div class="project-grid">
+                <div class="project-card" onclick="openProject('Ateliér Světla', 'Projekt zkoumající hru stínů v betonovém interiéru.', 'https://images.unsplash.com/photo-1487958449913-d92799063718?auto=format&fit=crop&w=800')">
+                    <div class="img-container"><img src="https://images.unsplash.com/photo-1487958449913-d92799063718?auto=format&fit=crop&w=800"></div>
+                    <h3 style="font-size: 0.9rem; text-transform: uppercase;">Ateliér Světla</h3>
+                </div>
+                <div class="project-card" onclick="openProject('Městský Dům', 'Návrh moderního bydlení pro urbanizované prostředí.', 'https://images.unsplash.com/photo-1518005020250-6859b2824c2d?auto=format&fit=crop&w=800')">
+                    <div class="img-container"><img src="https://images.unsplash.com/photo-1518005020250-6859b2824c2d?auto=format&fit=crop&w=800"></div>
+                    <h3 style="font-size: 0.9rem; text-transform: uppercase;">Městský Dům</h3>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="section-label" id="lbl-contact">Kontakt</div>
+            <form id="contact-form">
+                <input type="text" name="name" id="in-name" placeholder="Jméno" required>
+                <input type="email" name="email" id="in-email" placeholder="Email" required>
+                <textarea name="message" id="in-msg" rows="4" placeholder="Vaše zpráva" required></textarea>
+                <button type="submit" class="submit-btn" id="btn-send">Odeslat</button>
+                <div id="status" style="margin-top: 15px; font-size: 0.8rem; display: none;"></div>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const dict = {
+            cs: {
+                about: "Jsem studentka architektury zaměřená na minimalistické formy a funkční využití prostoru. Ve své tvorbě hledám rovnováhu mezi estetikou a praktičností.",
+                work: "Vybrané projekty", contact: "Kontakt",
+                name: "Jméno", msg: "Vaše zpráva", send: "Odeslat"
+            },
+            en: {
+                about: "I am an architecture student focused on minimalist forms and functional space use. In my work, I seek a balance between aesthetics and practicality.",
+                work: "Selected Works", contact: "Contact",
+                name: "Name", msg: "Your message", send: "Send"
+            }
+        };
+
+        let lang = 'cs';
+        document.getElementById('lang-btn').onclick = () => {
+            lang = lang === 'cs' ? 'en' : 'cs';
+            document.getElementById('lang-btn').innerText = lang === 'cs' ? 'EN' : 'CZ';
+            document.getElementById('about-me').innerText = dict[lang].about;
+            document.getElementById('lbl-work').innerText = dict[lang].work;
+            document.getElementById('lbl-contact').innerText = dict[lang].contact;
+            document.getElementById('in-name').placeholder = dict[lang].name;
+            document.getElementById('in-msg').placeholder = dict[lang].msg;
+            document.getElementById('btn-send').innerText = dict[lang].send;
+        };
+
+        document.getElementById('theme-btn').onclick = () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('#theme-btn i');
+            icon.className = document.body.classList.contains('dark-mode') ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        };
+
+        function openProject(title, desc, img) {
+            document.getElementById('m-title').innerText = title;
+            document.getElementById('m-desc').innerText = desc;
+            document.getElementById('m-img').src = img;
+            document.getElementById('p-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('p-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        (function(){ emailjs.init("lawCxK0MvIUwRfMHQ"); })();
+
+        document.getElementById('contact-form').onsubmit = function(e) {
+            e.preventDefault();
+            const s = document.getElementById('status');
+            s.style.display = 'block'; s.innerText = lang === 'cs' ? "Odesílám..." : "Sending...";
+            emailjs.sendForm('service_arxto6d', 'template_z2pafy8', this)
+                .then(() => {
+                    s.innerText = lang === 'cs' ? "Zpráva odeslána." : "Message sent.";
+                    this.reset();
+                });
+        };
+    </script>
+</body>
+</html>
